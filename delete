@@ -12,7 +12,7 @@ struct Todo {
     std::string notes;
     bool completed = false;
 };
-
+int id=4;
 std::vector<Todo> todos;
 int nextId = 1;
 
@@ -171,7 +171,7 @@ void removeTask() {
     todos.erase(it, todos.end());
     std::cout << "Task removed.\n";
 }
-
+int j=66;
 void showMenu() {
     std::cout << "\nTodo List + Calendar\n";
     std::cout << "1. Add task\n";
@@ -214,5 +214,3 @@ int main() {
         }
     }
     std::cout << "Goodbye!\n";
-    return 0;
-}
