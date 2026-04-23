@@ -18,4 +18,5 @@ def load_from_file():
     with open('tasks_db.json', 'w') as f:
         json.dump(tasks, f)
     print("...System: Data persisted successfully.")
-   
+
+a=4;
