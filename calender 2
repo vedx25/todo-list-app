@@ -1,0 +1,113 @@
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <vector>
+using namespace std;
+
+// Store tasks: key = "YYYY-MM-DD"
+map<string, vector<string>> tasks;
+
+// Function to check leap year
+bool isLeap(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+// Get number of days in month
+int getDays(int month, int year) {
+    if (month == 2)
+        return isLeap(year) ? 29 : 28;
+    if (month == 4 || month == 6 || month == 9 || month == 11)
+        return 30;
+    return 31;
+}
+
+// Zeller’s Congruence to find first day
+int getStartDay(int month, int year) {
+    if (month < 3) {
+        month += 12;
+        year--;
+    }
+    int q = 1;
+    int k = year % 100;
+    int j = year / 100;
+    int h = (q + (13 * (month + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
+    return (h + 6) % 7; // convert to 0 = Sunday
+}
+
+// Display calendar
+void displayCalendar(int month, int year) {
+    cout << "\n   Calendar - " << month << "/" << year << "\n";
+    cout << "Sun Mon Tue Wed Thu Fri Sat\n";
+
+    int startDay = getStartDay(month, year);
+    int days = getDays(month, year);
+
+    for (int i = 0; i < startDay; i++)
+        cout << "    ";
+
+    for (int d = 1; d <= days; d++) {
+        cout << setw(3) << d << " ";
+        if ((d + startDay) % 7 == 0)
+            cout << endl;
+    }
+    cout << endl;
+}
+
+// Add task
+void addTask() {
+    string date, task;
+    cout << "Enter date (YYYY-MM-DD): ";
+    cin >> date;
+    cin.ignore();
+    cout << "Enter task: ";
+    getline(cin, task);
+
+    tasks[date].push_back(task);
+    cout << "Task added!\n";
+}
+
+// View tasks
+void viewTasks() {
+    string date;
+    cout << "Enter date (YYYY-MM-DD): ";
+    cin >> date;
+
+    if (tasks.find(date) != tasks.end()) {
+        cout << "Tasks on " << date << ":\n";
+        for (int i = 0; i < tasks[date].size(); i++) {
+            cout << i + 1 << ". " << tasks[date][i] << endl;
+        }
+    } else {
+        cout << "No tasks found.\n";
+    }
+}
+
+// Main menu
+int main() {
+    int choice;
+
+    while (true) {
+        cout << "\n--- TO-DO CALENDAR ---\n";
+        cout << "1. Show Calendar\n";
+        cout << "2. Add Task\n";
+        cout << "3. View Tasks\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            int m, y;
+            cout << "Enter month and year: ";
+            cin >> m >> y;
+            displayCalendar(m, y);
+        } else if (choice == 2) {
+            addTask();
+        } else if (choice == 3) {
+            viewTasks();
+        } else {
+            break;
+        }
+    }
+
+    return 0;
+}
